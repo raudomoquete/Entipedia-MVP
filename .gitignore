@@ -55,6 +55,9 @@ next-env.d.ts
 *.tmp
 *.temp
 
+# Documentation files (temporary)
+COMMIT_INSTRUCTIONS.md
+
 # Package manager locks (optional - descomenta si quieres ignorarlos)
 # package-lock.json
 # yarn.lock
