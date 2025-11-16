@@ -4,10 +4,17 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
 import { env } from '../../../shared/constants/env';
 import { logger } from '../../../infrastructure/logger/logger';
 import { errorHandler } from '../middlewares/error-handler';
 import { swaggerSetup } from './swagger';
+import { ProjectController } from '../controllers/project-controller';
+import { ProjectService } from '../../../application/services/project-service';
+import { ProjectRepository } from '../../../infrastructure/repositories/project-repository';
+import { ClientController } from '../controllers/client-controller';
+import { ClientService } from '../../../application/services/client-service';
+import { ClientRepository } from '../../../infrastructure/repositories/client-repository';
 
 export function createApp(): Express {
   const app = express();
@@ -41,6 +48,9 @@ export function createApp(): Express {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // Static files for uploads
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
   // Rate limiting
   const limiter = rateLimit({
     windowMs: env.RATE_LIMIT_WINDOW_MS,
@@ -61,8 +71,17 @@ export function createApp(): Express {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // API routes will be registered here
-  // app.use('/api/v1', routes);
+  // API routes
+  const projectRepository = new ProjectRepository();
+  const projectService = new ProjectService(projectRepository);
+  const projectController = new ProjectController(projectService);
+
+  const clientRepository = new ClientRepository();
+  const clientService = new ClientService(clientRepository);
+  const clientController = new ClientController(clientService);
+
+  app.use('/api/v1', projectController.router);
+  app.use('/api/v1', clientController.router);
 
   // Swagger documentation
   swaggerSetup(app);

@@ -1,0 +1,473 @@
+[1mdiff --git a/backend/.env.example b/backend/.env.example[m
+[1mindex 8663726..9e5faa8 100644[m
+[1m--- a/backend/.env.example[m
+[1m+++ b/backend/.env.example[m
+[36m@@ -11,7 +11,7 @@[m [mDB_USER=user[m
+ DB_PASSWORD=password[m
+ [m
+ # CORS Configuration[m
+[31m-CORS_ORIGIN=http://localhost:5173[m
+[32m+[m[32mCORS_ORIGIN=http://localhost:3001[m
+ [m
+ # Logging[m
+ LOG_LEVEL=info[m
+[1mdiff --git a/backend/src/application/commands/create-client-command.ts b/backend/src/application/commands/create-client-command.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0403362[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/commands/create-client-command.ts[m
+[36m@@ -0,0 +1,7 @@[m
+[32m+[m[32mimport { CreateClientDto } from '../dto/client-dtos';[m
+[32m+[m
+[32m+[m[32mexport class CreateClientCommand {[m
+[32m+[m[32m  constructor(public readonly data: CreateClientDto) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/commands/create-project-command.ts b/backend/src/application/commands/create-project-command.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3487097[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/commands/create-project-command.ts[m
+[36m@@ -0,0 +1,7 @@[m
+[32m+[m[32mimport { CreateProjectDto } from '../dto/project-dtos';[m
+[32m+[m
+[32m+[m[32mexport class CreateProjectCommand {[m
+[32m+[m[32m  constructor(public readonly data: CreateProjectDto) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/commands/delete-client-command.ts b/backend/src/application/commands/delete-client-command.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9472183[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/commands/delete-client-command.ts[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mexport class DeleteClientCommand {[m
+[32m+[m[32m  constructor(public readonly id: string) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/commands/delete-project-command.ts b/backend/src/application/commands/delete-project-command.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..49118b4[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/commands/delete-project-command.ts[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mexport class DeleteProjectCommand {[m
+[32m+[m[32m  constructor(public readonly id: string) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/commands/update-client-command.ts b/backend/src/application/commands/update-client-command.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..09d59cc[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/commands/update-client-command.ts[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32mimport { UpdateClientDto } from '../dto/client-dtos';[m
+[32m+[m
+[32m+[m[32mexport class UpdateClientCommand {[m
+[32m+[m[32m  constructor([m
+[32m+[m[32m    public readonly id: string,[m
+[32m+[m[32m    public readonly data: UpdateClientDto[m
+[32m+[m[32m  ) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/commands/update-project-command.ts b/backend/src/application/commands/update-project-command.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e0f1357[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/commands/update-project-command.ts[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32mimport { UpdateProjectDto } from '../dto/project-dtos';[m
+[32m+[m
+[32m+[m[32mexport class UpdateProjectCommand {[m
+[32m+[m[32m  constructor([m
+[32m+[m[32m    public readonly id: string,[m
+[32m+[m[32m    public readonly data: UpdateProjectDto[m
+[32m+[m[32m  ) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/dto/client-dtos.ts b/backend/src/application/dto/client-dtos.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..23f83ad[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/dto/client-dtos.ts[m
+[36m@@ -0,0 +1,35 @@[m
+[32m+[m[32mexport interface CreateClientDto {[m
+[32m+[m[32m  name: string;[m
+[32m+[m[32m  type: string; // PERSON | COMPANY[m
+[32m+[m[32m  email?: string;[m
+[32m+[m[32m  phone?: string;[m
+[32m+[m[32m  lifetimeValue?: number; // monto en DOP[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport interface UpdateClientDto {[m
+[32m+[m[32m  name?: string;[m
+[32m+[m[32m  type?: string;[m
+[32m+[m[32m  email?: string;[m
+[32m+[m[32m  phone?: string;[m
+[32m+[m[32m  lifetimeValue?: number;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport interface ClientResponseDto {[m
+[32m+[m[32m  id: string;[m
+[32m+[m[32m  name: string;[m
+[32m+[m[32m  type: string;[m
+[32m+[m[32m  email?: string;[m
+[32m+[m[32m  phone?: string;[m
+[32m+[m[32m  lifetimeValue?: number;[m
+[32m+[m[32m  createdAt: string;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport interface PaginatedClientsResponseDto {[m
+[32m+[m[32m  items: ClientResponseDto[];[m
+[32m+[m[32m  total: number;[m
+[32m+[m[32m  page: number;[m
+[32m+[m[32m  pageSize: number;[m
+[32m+[m[32m  totalPages: number;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/dto/project-dtos.ts b/backend/src/application/dto/project-dtos.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b43730c[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/dto/project-dtos.ts[m
+[36m@@ -0,0 +1,24 @@[m
+[32m+[m[32mexport interface CreateProjectDto {[m
+[32m+[m[32m  name: string;[m
+[32m+[m[32m  description: string;[m
+[32m+[m[32m  status: string;[m
+[32m+[m[32m  priority: string;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport interface UpdateProjectDto {[m
+[32m+[m[32m  name?: string;[m
+[32m+[m[32m  description?: string;[m
+[32m+[m[32m  status?: string;[m
+[32m+[m[32m  priority?: string;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport interface ProjectResponseDto {[m
+[32m+[m[32m  id: string;[m
+[32m+[m[32m  name: string;[m
+[32m+[m[32m  description: string;[m
+[32m+[m[32m  status: string;[m
+[32m+[m[32m  priority: string;[m
+[32m+[m[32m  createdAt: string;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/queries/get-all-clients-query.ts b/backend/src/application/queries/get-all-clients-query.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b1e29a7[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/queries/get-all-clients-query.ts[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32mexport class GetAllClientsQuery {[m
+[32m+[m[32m  constructor([m
+[32m+[m[32m    public readonly page: number = 1,[m
+[32m+[m[32m    public readonly pageSize: number = 10[m
+[32m+[m[32m  ) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/queries/get-all-projects-query.ts b/backend/src/application/queries/get-all-projects-query.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..577cdff[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/queries/get-all-projects-query.ts[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32mexport class GetAllProjectsQuery {}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/queries/get-client-by-id-query.ts b/backend/src/application/queries/get-client-by-id-query.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..866562e[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/queries/get-client-by-id-query.ts[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mexport class GetClientByIdQuery {[m
+[32m+[m[32m  constructor(public readonly id: string) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/queries/get-project-by-id-query.ts b/backend/src/application/queries/get-project-by-id-query.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5f7db8b[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/queries/get-project-by-id-query.ts[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mexport class GetProjectByIdQuery {[m
+[32m+[m[32m  constructor(public readonly id: string) {}[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/services/client-service.ts b/backend/src/application/services/client-service.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7e0aec9[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/services/client-service.ts[m
+[36m@@ -0,0 +1,136 @@[m
+[32m+[m[32mimport { IClientRepository } from '../../domain/repos-interfaces/client-repository';[m
+[32m+[m[32mimport { Client } from '../../domain/entities/client';[m
+[32m+[m[32mimport { ClientType } from '../../domain/value-objects/client-type';[m
+[32m+[m[32mimport { MoneyDOP } from '../../domain/value-objects/money-dop';[m
+[32m+[m[32mimport { createClientId } from '../../domain/value-objects/client-id';[m
+[32m+[m[32mimport {[m
+[32m+[m[32m  ClientResponseDto,[m
+[32m+[m[32m  CreateClientDto,[m
+[32m+[m[32m  PaginatedClientsResponseDto,[m
+[32m+[m[32m  UpdateClientDto,[m
+[32m+[m[32m} from '../dto/client-dtos';[m
+[32m+[m[32mimport { Result } from '../../shared/errors/result';[m
+[32m+[m[32mimport { AppError } from '../../shared/errors/app-error';[m
+[32m+[m
+[32m+[m[32mexport class ClientService {[m
+[32m+[m[32m  constructor(private readonly clientRepository: IClientRepository) {}[m
+[32m+[m
+[32m+[m[32m  private toResponseDto(client: Client): ClientResponseDto {[m
+[32m+[m[32m    return {[m
+[32m+[m[32m      id: client.id,[m
+[32m+[m[32m      name: client.name,[m
+[32m+[m[32m      type: client.type,[m
+[32m+[m[32m      email: client.email,[m
+[32m+[m[32m      phone: client.phone,[m
+[32m+[m[32m      lifetimeValue: client.lifetimeValue?.getAmount(),[m
+[32m+[m[32m      createdAt: client.createdAt.toISOString(),[m
+[32m+[m[32m    };[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async createClient([m
+[32m+[m[32m    dto: CreateClientDto[m
+[32m+[m[32m  ): Promise<Result<ClientResponseDto, AppError>> {[m
+[32m+[m[32m    const client = Client.create({[m
+[32m+[m[32m      id: createClientId(crypto.randomUUID()),[m
+[32m+[m[32m      name: dto.name.trim(),[m
+[32m+[m[32m      type: dto.type as ClientType,[m
+[32m+[m[32m      email: dto.email?.trim(),[m
+[32m+[m[32m      phone: dto.phone?.trim(),[m
+[32m+[m[32m      lifetimeValue:[m
+[32m+[m[32m        dto.lifetimeValue !== undefined[m
+[32m+[m[32m          ? MoneyDOP.create(dto.lifetimeValue)[m
+[32m+[m[32m          : undefined,[m
+[32m+[m[32m      createdAt: new Date(),[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    const result = await this.clientRepository.create(client);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Result.success(this.toResponseDto(result.value));[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async updateClient([m
+[32m+[m[32m    id: string,[m
+[32m+[m[32m    dto: UpdateClientDto[m
+[32m+[m[32m  ): Promise<Result<ClientResponseDto, AppError>> {[m
+[32m+[m[32m    const clientId = createClientId(id);[m
+[32m+[m
+[32m+[m[32m    const partial: {[m
+[32m+[m[32m      name?: string;[m
+[32m+[m[32m      type?: ClientType;[m
+[32m+[m[32m      email?: string;[m
+[32m+[m[32m      phone?: string;[m
+[32m+[m[32m      lifetimeValue?: MoneyDOP;[m
+[32m+[m[32m    } = {};[m
+[32m+[m
+[32m+[m[32m    if (dto.name !== undefined) {[m
+[32m+[m[32m      partial.name = dto.name.trim();[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.type !== undefined) {[m
+[32m+[m[32m      partial.type = dto.type as ClientType;[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.email !== undefined) {[m
+[32m+[m[32m      partial.email = dto.email.trim();[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.phone !== undefined) {[m
+[32m+[m[32m      partial.phone = dto.phone.trim();[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.lifetimeValue !== undefined) {[m
+[32m+[m[32m      partial.lifetimeValue = MoneyDOP.create(dto.lifetimeValue);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const result = await this.clientRepository.update(clientId, partial);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Result.success(this.toResponseDto(result.value));[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async deleteClient(id: string): Promise<Result<void, AppError>> {[m
+[32m+[m[32m    const clientId = createClientId(id);[m
+[32m+[m[32m    return this.clientRepository.delete(clientId);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async getAllClients([m
+[32m+[m[32m    page: number,[m
+[32m+[m[32m    pageSize: number[m
+[32m+[m[32m  ): Promise<Result<PaginatedClientsResponseDto, AppError>> {[m
+[32m+[m[32m    // Usamos el repositorio paginado de infraestructura.[m
+[32m+[m[32m    // Aunque el interface de dominio no lo expone, se puede ampliar ahí si lo deseas;[m
+[32m+[m[32m    // por ahora asumimos que la implementación concreta tiene este método.[m
+[32m+[m[32m    // @ts-expect-error: método específico de la implementación[m
+[32m+[m[32m    const result = await this.clientRepository.findAllPaginated(page, pageSize);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const mapped: PaginatedClientsResponseDto = {[m
+[32m+[m[32m      items: result.value.items.map((client: Client) =>[m
+[32m+[m[32m        this.toResponseDto(client)[m
+[32m+[m[32m      ),[m
+[32m+[m[32m      total: result.value.total,[m
+[32m+[m[32m      page: result.value.page,[m
+[32m+[m[32m      pageSize: result.value.pageSize,[m
+[32m+[m[32m      totalPages: result.value.totalPages,[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    return Result.success(mapped);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async getClientById([m
+[32m+[m[32m    id: string[m
+[32m+[m[32m  ): Promise<Result<ClientResponseDto, AppError>> {[m
+[32m+[m[32m    const clientId = createClientId(id);[m
+[32m+[m[32m    const result = await this.clientRepository.findById(clientId);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Result.success(this.toResponseDto(result.value));[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/application/services/project-service.ts b/backend/src/application/services/project-service.ts[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0140053[m
+[1m--- /dev/null[m
+[1m+++ b/backend/src/application/services/project-service.ts[m
+[36m@@ -0,0 +1,114 @@[m
+[32m+[m[32mimport { IProjectRepository } from '../../domain/repos-interfaces/project-repository';[m
+[32m+[m[32mimport { Project } from '../../domain/entities/project';[m
+[32m+[m[32mimport { ProjectName } from '../../domain/value-objects/project-name';[m
+[32m+[m[32mimport { ProjectStatus } from '../../domain/value-objects/project-status';[m
+[32m+[m[32mimport { ProjectPriority } from '../../domain/value-objects/project-priority';[m
+[32m+[m[32mimport { createProjectId } from '../../domain/value-objects/project-id';[m
+[32m+[m[32mimport {[m
+[32m+[m[32m  CreateProjectDto,[m
+[32m+[m[32m  UpdateProjectDto,[m
+[32m+[m[32m  ProjectResponseDto,[m
+[32m+[m[32m} from '../dto/project-dtos';[m
+[32m+[m[32mimport { Result } from '../../shared/errors/result';[m
+[32m+[m[32mimport { AppError } from '../../shared/errors/app-error';[m
+[32m+[m
+[32m+[m[32mexport class ProjectService {[m
+[32m+[m[32m  constructor(private readonly projectRepository: IProjectRepository) {}[m
+[32m+[m
+[32m+[m[32m  private toResponseDto(project: Project): ProjectResponseDto {[m
+[32m+[m[32m    return {[m
+[32m+[m[32m      id: project.id,[m
+[32m+[m[32m      name: project.name.getValue(),[m
+[32m+[m[32m      description: project.description,[m
+[32m+[m[32m      status: project.status,[m
+[32m+[m[32m      priority: project.priority,[m
+[32m+[m[32m      createdAt: project.createdAt.toISOString(),[m
+[32m+[m[32m    };[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async createProject([m
+[32m+[m[32m    dto: CreateProjectDto[m
+[32m+[m[32m  ): Promise<Result<ProjectResponseDto, AppError>> {[m
+[32m+[m[32m    const project = Project.create({[m
+[32m+[m[32m      id: createProjectId(crypto.randomUUID()),[m
+[32m+[m[32m      name: ProjectName.create(dto.name),[m
+[32m+[m[32m      description: dto.description,[m
+[32m+[m[32m      status: dto.status as ProjectStatus,[m
+[32m+[m[32m      priority: dto.priority as ProjectPriority,[m
+[32m+[m[32m      createdAt: new Date(),[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    const result = await this.projectRepository.create(project);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Result.success(this.toResponseDto(result.value));[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async updateProject([m
+[32m+[m[32m    id: string,[m
+[32m+[m[32m    dto: UpdateProjectDto[m
+[32m+[m[32m  ): Promise<Result<ProjectResponseDto, AppError>> {[m
+[32m+[m[32m    const projectId = createProjectId(id);[m
+[32m+[m
+[32m+[m[32m    // Usamos un tipo específico en lugar de Partial<Project> porque[m
+[32m+[m[32m    // las propiedades expuestas en Project son de solo lectura (getters).[m
+[32m+[m[32m    const partial: {[m
+[32m+[m[32m      name?: ProjectName;[m
+[32m+[m[32m      description?: string;[m
+[32m+[m[32m      status?: ProjectStatus;[m
+[32m+[m[32m      priority?: ProjectPriority;[m
+[32m+[m[32m    } = {};[m
+[32m+[m[32m    if (dto.name !== undefined) {[m
+[32m+[m[32m      partial.name = ProjectName.create(dto.name);[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.description !== undefined) {[m
+[32m+[m[32m      partial.description = dto.description;[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.status !== undefined) {[m
+[32m+[m[32m      partial.status = dto.status as ProjectStatus;[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (dto.priority !== undefined) {[m
+[32m+[m[32m      partial.priority = dto.priority as ProjectPriority;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const result = await this.projectRepository.update(projectId, partial);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Result.success(this.toResponseDto(result.value));[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async deleteProject([m
+[32m+[m[32m    id: string[m
+[32m+[m[32m  ): Promise<Result<void, AppError>> {[m
+[32m+[m[32m    const projectId = createProjectId(id);[m
+[32m+[m[32m    return this.projectRepository.delete(projectId);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async getAllProjects(): Promise<Result<ProjectResponseDto[], AppError>> {[m
+[32m+[m[32m    const result = await this.projectRepository.findAll();[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const projects = result.value.map((project) => this.toResponseDto(project));[m
+[32m+[m[32m    return Result.success(projects);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  async getProjectById([m
+[32m+[m[32m    id: string[m
+[32m+[m[32m  ): Promise<Result<ProjectResponseDto, AppError>> {[m
+[32m+[m[32m    const projectId = createProjectId(id);[m
+[32m+[m[32m    const result = await this.projectRepository.findById(projectId);[m
+[32m+[m[32m    if (!result.success) {[m
+[32m+[m[32m      return Result.failure(result.error);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Result.success(this.toResponseDto(result.value));[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/backend/src/domain/entities/client.ts b/backend/src/domain/entities/client.ts[m
+[1mnew file 

@@ -28,6 +28,8 @@ export const STORAGE_KEYS = {
  */
 export const ROUTES = {
   home: '/',
-  // Add more routes as needed
+  projects: '/projects',
+  clients: '/clients',
+  files: '/files',
 } as const;
 
