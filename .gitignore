@@ -20,6 +20,10 @@ out/
 build/
 dist/
 
+# File uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
 # Testing
 coverage/
 *.lcov
