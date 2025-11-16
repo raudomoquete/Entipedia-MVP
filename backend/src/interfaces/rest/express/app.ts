@@ -12,6 +12,9 @@ import { swaggerSetup } from './swagger';
 import { ProjectController } from '../controllers/project-controller';
 import { ProjectService } from '../../../application/services/project-service';
 import { ProjectRepository } from '../../../infrastructure/repositories/project-repository';
+import { ClientController } from '../controllers/client-controller';
+import { ClientService } from '../../../application/services/client-service';
+import { ClientRepository } from '../../../infrastructure/repositories/client-repository';
 
 export function createApp(): Express {
   const app = express();
@@ -72,7 +75,13 @@ export function createApp(): Express {
   const projectRepository = new ProjectRepository();
   const projectService = new ProjectService(projectRepository);
   const projectController = new ProjectController(projectService);
+
+  const clientRepository = new ClientRepository();
+  const clientService = new ClientService(clientRepository);
+  const clientController = new ClientController(clientService);
+
   app.use('/api/v1', projectController.router);
+  app.use('/api/v1', clientController.router);
 
   // Swagger documentation
   swaggerSetup(app);
