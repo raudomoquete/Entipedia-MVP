@@ -9,6 +9,9 @@ import { env } from '../../../shared/constants/env';
 import { logger } from '../../../infrastructure/logger/logger';
 import { errorHandler } from '../middlewares/error-handler';
 import { swaggerSetup } from './swagger';
+import { ProjectController } from '../controllers/project-controller';
+import { ProjectService } from '../../../application/services/project-service';
+import { ProjectRepository } from '../../../infrastructure/repositories/project-repository';
 
 export function createApp(): Express {
   const app = express();
@@ -65,8 +68,11 @@ export function createApp(): Express {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // API routes will be registered here
-  // app.use('/api/v1', routes);
+  // API routes
+  const projectRepository = new ProjectRepository();
+  const projectService = new ProjectService(projectRepository);
+  const projectController = new ProjectController(projectService);
+  app.use('/api/v1', projectController.router);
 
   // Swagger documentation
   swaggerSetup(app);
