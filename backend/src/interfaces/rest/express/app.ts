@@ -15,6 +15,10 @@ import { ProjectRepository } from '../../../infrastructure/repositories/project-
 import { ClientController } from '../controllers/client-controller';
 import { ClientService } from '../../../application/services/client-service';
 import { ClientRepository } from '../../../infrastructure/repositories/client-repository';
+import { FileController } from '../controllers/file-controller';
+import { FileService } from '../../../application/services/file-service';
+import { FileRepository } from '../../../infrastructure/repositories/file-repository';
+import { LocalFileStorageService } from '../../../infrastructure/storage/local-file-storage-service';
 
 export function createApp(): Express {
   const app = express();
@@ -48,7 +52,7 @@ export function createApp(): Express {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Static files for uploads
+  // Static files for uploads (serves files from /uploads)
   app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
   // Rate limiting
@@ -80,8 +84,14 @@ export function createApp(): Express {
   const clientService = new ClientService(clientRepository);
   const clientController = new ClientController(clientService);
 
+  const fileRepository = new FileRepository();
+  const storageService = new LocalFileStorageService();
+  const fileService = new FileService(fileRepository, storageService);
+  const fileController = new FileController(fileService);
+
   app.use('/api/v1', projectController.router);
   app.use('/api/v1', clientController.router);
+  app.use('/api/v1', fileController.router);
 
   // Swagger documentation
   swaggerSetup(app);
