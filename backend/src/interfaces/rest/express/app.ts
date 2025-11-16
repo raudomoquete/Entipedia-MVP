@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
 import { env } from '../../../shared/constants/env';
 import { logger } from '../../../infrastructure/logger/logger';
 import { errorHandler } from '../middlewares/error-handler';
@@ -40,6 +41,9 @@ export function createApp(): Express {
   // Body parsing
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  // Static files for uploads
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
   // Rate limiting
   const limiter = rateLimit({
