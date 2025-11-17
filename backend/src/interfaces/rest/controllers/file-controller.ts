@@ -163,7 +163,7 @@ export class FileController extends BaseController {
 
       const metadataParse = uploadFileMetadataSchema.safeParse(req.body);
       if (!metadataParse.success) {
-        this.badRequest(res, metadataParse.error.errors[0]?.message);
+        this.badRequest(res, metadataParse.error.issues[0]?.message);
         return;
       }
 

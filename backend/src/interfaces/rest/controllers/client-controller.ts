@@ -175,7 +175,7 @@ export class ClientController extends BaseController {
     async (req: Request, res: Response, next: NextFunction) => {
       const parsed = paginationSchema.safeParse(req.query);
       if (!parsed.success) {
-        this.badRequest(res, parsed.error.errors[0]?.message);
+        this.badRequest(res, parsed.error.issues[0]?.message);
         return;
       }
 
@@ -197,7 +197,7 @@ export class ClientController extends BaseController {
     async (req: Request, res: Response, next: NextFunction) => {
       const parseResult = createClientSchema.safeParse(req.body);
       if (!parseResult.success) {
-        this.badRequest(res, parseResult.error.errors[0]?.message);
+        this.badRequest(res, parseResult.error.issues[0]?.message);
         return;
       }
 
@@ -216,7 +216,7 @@ export class ClientController extends BaseController {
       const { id } = req.params;
       const parseResult = updateClientSchema.safeParse(req.body);
       if (!parseResult.success) {
-        this.badRequest(res, parseResult.error.errors[0]?.message);
+        this.badRequest(res, parseResult.error.issues[0]?.message);
         return;
       }
 

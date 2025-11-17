@@ -15,6 +15,13 @@
       "when": 1763308124217,
       "tag": "0001_melted_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763417959994,
+      "tag": "0002_gifted_the_renegades",
+      "breakpoints": true
     }
   ]
 }

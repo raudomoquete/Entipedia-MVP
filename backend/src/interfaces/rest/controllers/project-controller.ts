@@ -175,7 +175,7 @@ export class ProjectController extends BaseController {
     async (req: Request, res: Response, next: NextFunction) => {
       const parseResult = createProjectSchema.safeParse(req.body);
       if (!parseResult.success) {
-        this.badRequest(res, parseResult.error.errors[0]?.message);
+        this.badRequest(res, parseResult.error.issues[0]?.message);
         return;
       }
 
@@ -194,7 +194,7 @@ export class ProjectController extends BaseController {
       const { id } = req.params;
       const parseResult = updateProjectSchema.safeParse(req.body);
       if (!parseResult.success) {
-        this.badRequest(res, parseResult.error.errors[0]?.message);
+        this.badRequest(res, parseResult.error.issues[0]?.message);
         return;
       }
 

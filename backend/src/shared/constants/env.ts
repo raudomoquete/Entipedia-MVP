@@ -11,7 +11,8 @@ export const env = {
   DB_NAME: process.env.DB_NAME || 'entipedia',
   DB_USER: process.env.DB_USER || 'user',
   DB_PASSWORD: process.env.DB_PASSWORD || 'password',
-  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3001',
+  API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3000',
   LOG_LEVEL: process.env.LOG_LEVEL || 'info',
   RATE_LIMIT_WINDOW_MS: parseInt(
     process.env.RATE_LIMIT_WINDOW_MS || '900000',

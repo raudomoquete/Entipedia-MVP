@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { env } from '../../shared/constants/env';
 
 /**
  * Metadata básica de un archivo almacenado localmente
@@ -88,10 +89,14 @@ export class LocalFileStorageService {
 
   /**
    * Retorna la ruta pública para acceder al archivo desde el frontend
-   * Ejemplo: /uploads/123456-report.pdf
+   * Retorna una URL absoluta para que funcione desde cualquier origen
+   * Ejemplo: http://localhost:3000/uploads/123456-report.pdf
    */
   getPublicUrl(relativePath: string): string {
-    return `/uploads/${relativePath}`;
+    const baseUrl = env.API_BASE_URL.endsWith('/') 
+      ? env.API_BASE_URL.slice(0, -1) 
+      : env.API_BASE_URL;
+    return `${baseUrl}/uploads/${relativePath}`;
   }
 
   /**

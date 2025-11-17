@@ -23,14 +23,41 @@ import { LocalFileStorageService } from '../../../infrastructure/storage/local-f
 export function createApp(): Express {
   const app = express();
 
-  // Security middleware
-  app.use(helmet());
+  // CORS configuration - DEBE estar ANTES de helmet
+  const allowedOrigins = env.NODE_ENV === 'development' 
+    ? ['http://localhost:3001', 'http://localhost:5173', 'http://localhost:3000']
+    : [env.CORS_ORIGIN];
 
-  // CORS configuration
+  const corsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean | string) => void) => {
+      // Si no hay origen (ej: misma-origen, solicitudes desde el mismo servidor), permitir
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      
+      // Verificar si el origen está en la lista permitida
+      if (allowedOrigins.includes(origin)) {
+        callback(null, origin);
+        return;
+      }
+      
+      // Rechazar origen no permitido
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  
+  logger.info({ allowedOrigins, corsOrigin: env.CORS_ORIGIN, nodeEnv: env.NODE_ENV }, 'CORS configuration loaded');
+  app.use(cors(corsOptions));
+
+  // Security middleware - Configurar helmet para no interferir con CORS
   app.use(
-    cors({
-      origin: env.CORS_ORIGIN,
-      credentials: true,
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      crossOriginEmbedderPolicy: false,
     })
   );
 
