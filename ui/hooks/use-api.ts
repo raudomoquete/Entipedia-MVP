@@ -13,6 +13,8 @@ export function useApiQuery<T>(
   return useQuery<T, ApiError>({
     queryKey: key,
     queryFn: () => apiRequest<T>(config),
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
     ...options,
   });
 }

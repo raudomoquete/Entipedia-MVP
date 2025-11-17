@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { ClientForm, ClientFormValues } from './client-form';

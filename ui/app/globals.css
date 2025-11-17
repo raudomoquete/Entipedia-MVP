@@ -1,26 +1,120 @@
 @import "tailwindcss";
 
+/**
+ * Entipedia Brand Identity - Color Palette
+ * Paleta oficial de colores de Entipedia
+ */
 :root {
+  /* Entipedia Brand Colors */
+  --entipedia-green-dark: #008000;      /* Primary Green */
+  --entipedia-green-light: #90EE90;     /* Light Green */
+  --entipedia-yellow: #FFFF00;          /* Yellow */
+  --entipedia-cyan: #00FFFF;            /* Cyan */
+  --entipedia-blue-dark: #0000FF;       /* Blue */
+  --entipedia-purple: #800080;          /* Purple */
+  --entipedia-red: #FF0000;             /* Red */
+  --entipedia-pink: #FF69B4;            /* Hot Pink */
+  --entipedia-orange: #FFA500;          /* Orange */
+  --entipedia-pink-light: #FFB6C1;      /* Light Pink */
+
+  /* Semantic Color Mappings */
+  --primary: var(--entipedia-green-dark);
+  --primary-hover: var(--entipedia-green-light);
+  --primary-foreground: #ffffff;
+
+  --secondary: var(--entipedia-blue-dark);
+  --secondary-hover: var(--entipedia-cyan);
+  --secondary-foreground: #ffffff;
+
+  --accent: var(--entipedia-purple);
+  --accent-foreground: #ffffff;
+
+  --success: var(--entipedia-green-dark);
+  --success-foreground: #ffffff;
+
+  --warning: var(--entipedia-orange);
+  --warning-foreground: #000000;
+
+  --destructive: var(--entipedia-red);
+  --destructive-foreground: #ffffff;
+
+  --info: var(--entipedia-cyan);
+  --info-foreground: #000000;
+
+  /* Neutral Colors (with Entipedia touch) */
   --background: #ffffff;
   --foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: var(--entipedia-green-dark);
+  --card: #ffffff;
+  --card-foreground: #171717;
 }
 
 @theme inline {
+  /* Background & Foreground */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  
+  /* Primary Colors */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  /* Secondary Colors */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  /* Accent */
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  /* Semantic Colors */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  
+  /* UI Colors */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Dark mode adjustments with Entipedia palette */
     --background: #0a0a0a;
     --foreground: #ededed;
+    --muted: #1a1a1a;
+    --muted-foreground: #a3a3a3;
+    --border: #262626;
+    --input: #262626;
+    --card: #0a0a0a;
+    --card-foreground: #ededed;
+    
+    /* Adjust primary for better contrast in dark mode */
+    --primary: var(--entipedia-green-light);
+    --primary-hover: var(--entipedia-green-dark);
+    --primary-foreground: #000000;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }

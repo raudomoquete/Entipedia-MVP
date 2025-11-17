@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/cn';
@@ -43,9 +45,9 @@ export function Sidebar() {
               href={item.href}
               className={cn(
                 'flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                'hover:bg-accent hover:text-accent-foreground',
+                'hover:bg-[var(--primary-hover)]/20 hover:text-primary',
                 isActive
-                  ? 'bg-accent text-accent-foreground'
+                  ? 'bg-primary/10 text-primary border-l-2 border-primary'
                   : 'text-muted-foreground'
               )}
             >

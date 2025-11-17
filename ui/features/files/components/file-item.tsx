@@ -33,6 +33,7 @@ function formatSize(bytes: number): string {
 
 export function FileItem({ file, onDownload, onDelete }: FileItemProps) {
   const Icon = getFileIcon(file.type);
+  const isImage = file.type === 'IMAGE';
 
   return (
     <div
@@ -42,9 +43,27 @@ export function FileItem({ file, onDownload, onDelete }: FileItemProps) {
       )}
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted">
-          <Icon className="h-5 w-5 text-muted-foreground" />
-        </div>
+        {isImage ? (
+          <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border bg-muted">
+            <img
+              src={file.url}
+              alt={file.name}
+              className="h-full w-full object-cover"
+              onError={(e) => {
+                // Si la imagen falla al cargar, mostrar el icono
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+            <div className="absolute hidden h-full w-full items-center justify-center bg-muted">
+              <Icon className="h-5 w-5 text-muted-foreground" />
+            </div>
+          </div>
+        ) : (
+          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted">
+            <Icon className="h-5 w-5 text-muted-foreground" />
+          </div>
+        )}
         <div className="space-y-0.5">
           <p className="font-medium leading-tight">{file.name}</p>
           <p className="text-xs text-muted-foreground">
@@ -55,37 +74,31 @@ export function FileItem({ file, onDownload, onDelete }: FileItemProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          asChild={onDownload ? undefined : true}
-        >
-          {onDownload ? (
-            <span
-              aria-label="Descargar archivo"
-              onClick={() => onDownload(file)}
-            >
-              <Download className="h-4 w-4" />
-            </span>
-          ) : (
-            // Fallback: link directo
-            <a
-              href={file.url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Descargar archivo"
-            >
-              <Download className="h-4 w-4" />
-            </a>
-          )}
-        </Button>
+        {onDownload ? (
+          <Button
+            variant="ghost"
+            className="h-8 w-8 p-0"
+            aria-label="Descargar archivo"
+            onClick={() => onDownload(file)}
+          >
+            <Download className="h-4 w-4" />
+          </Button>
+        ) : (
+          <a
+            href={file.url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Descargar archivo"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <Download className="h-4 w-4" />
+          </a>
+        )}
 
         {onDelete && (
           <Button
             variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-destructive hover:text-destructive"
+            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
             aria-label="Eliminar archivo"
             onClick={() => onDelete(file.id)}
           >

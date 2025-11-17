@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DndContext,
   DragEndEvent,
@@ -8,6 +10,7 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Project, ProjectStatus } from '@/types/project';
 import { ProjectCard } from './project-card';
+import { cn } from '@/lib/cn';
 
 const COLUMNS: { id: ProjectStatus; title: string }[] = [
   { id: 'PENDING', title: 'Pendiente' },
@@ -57,11 +60,41 @@ export function KanbanBoard({
             <div
               key={column.id}
               id={column.id}
-              className="flex flex-col rounded-md border bg-muted/40 p-3"
+              className={cn(
+                'flex flex-col rounded-md border p-3 transition-colors',
+                column.id === 'DONE' && 'bg-success/5 border-success/20',
+                column.id === 'CANCELLED' && 'bg-destructive/5 border-destructive/20',
+                column.id === 'IN_PROGRESS' && 'bg-info/5 border-info/20',
+                column.id === 'IN_REVIEW' && 'bg-warning/5 border-warning/20',
+                !['DONE', 'CANCELLED', 'IN_PROGRESS', 'IN_REVIEW'].includes(column.id) &&
+                  'bg-muted/40 border-border'
+              )}
             >
               <div className="mb-2 flex items-center justify-between">
-                <h2 className="text-sm font-semibold">{column.title}</h2>
-                <span className="text-xs text-muted-foreground">
+                <h2
+                  className={cn(
+                    'text-sm font-semibold',
+                    column.id === 'DONE' && 'text-success',
+                    column.id === 'CANCELLED' && 'text-destructive',
+                    column.id === 'IN_PROGRESS' && 'text-info',
+                    column.id === 'IN_REVIEW' && 'text-warning',
+                    !['DONE', 'CANCELLED', 'IN_PROGRESS', 'IN_REVIEW'].includes(column.id) &&
+                      'text-foreground'
+                  )}
+                >
+                  {column.title}
+                </h2>
+                <span
+                  className={cn(
+                    'rounded-full px-2 py-0.5 text-xs font-medium',
+                    column.id === 'DONE' && 'bg-success/20 text-success-foreground',
+                    column.id === 'CANCELLED' && 'bg-destructive/20 text-destructive-foreground',
+                    column.id === 'IN_PROGRESS' && 'bg-info/20 text-info-foreground',
+                    column.id === 'IN_REVIEW' && 'bg-warning/20 text-warning-foreground',
+                    !['DONE', 'CANCELLED', 'IN_PROGRESS', 'IN_REVIEW'].includes(column.id) &&
+                      'bg-muted text-muted-foreground'
+                  )}
+                >
                   {columnProjects.length}
                 </span>
               </div>

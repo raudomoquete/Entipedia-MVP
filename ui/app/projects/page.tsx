@@ -1,3 +1,5 @@
+'use client';
+
 import { KanbanBoard } from '@/features/projects/components/kanban-board';
 import { CreateProjectModal } from '@/features/projects/components/create-project-modal';
 import {
@@ -29,7 +31,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pl-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Proyectos</h1>
           <p className="text-muted-foreground">
@@ -40,13 +42,15 @@ export default function ProjectsPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Cargando proyectos...</p>
+        <p className="text-sm text-muted-foreground pl-4">Cargando proyectos...</p>
       ) : (
-        <KanbanBoard
-          projects={projects}
-          onStatusChange={handleStatusChange}
-          onDeleteProject={handleDelete}
-        />
+        <div className="pl-4">
+          <KanbanBoard
+            projects={projects}
+            onStatusChange={handleStatusChange}
+            onDeleteProject={handleDelete}
+          />
+        </div>
       )}
     </div>
   );

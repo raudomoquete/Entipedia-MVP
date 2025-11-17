@@ -1,20 +1,37 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, X } from 'lucide-react';
+import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface UploadFileModalProps {
   onUpload: (file: { blob: Blob; filename: string }) => void | Promise<void>;
 }
 
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp'];
+
 export function UploadFileModal({ onUpload }: UploadFileModalProps) {
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const isImage = useMemo(() => {
+    if (!selectedFile) return false;
+    return IMAGE_TYPES.includes(selectedFile.type);
+  }, [selectedFile]);
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       setSelectedFile(file);
+      // Si es una imagen, crear preview
+      if (IMAGE_TYPES.includes(file.type)) {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      } else {
+        setPreviewUrl(null);
+      }
     }
   };
 
@@ -27,6 +44,19 @@ export function UploadFileModal({ onUpload }: UploadFileModalProps) {
     if (!selectedFile) return;
     await onUpload({ blob: selectedFile, filename: selectedFile.name });
     setSelectedFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setSelectedFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
     setOpen(false);
   };
 
@@ -50,7 +80,7 @@ export function UploadFileModal({ onUpload }: UploadFileModalProps) {
               <button
                 type="button"
                 className="text-sm text-muted-foreground hover:underline"
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
               >
                 Cerrar
               </button>
@@ -65,7 +95,21 @@ export function UploadFileModal({ onUpload }: UploadFileModalProps) {
               }`}
             >
               <input {...getInputProps()} />
-              <Upload className="mb-2 h-6 w-6 text-muted-foreground" />
+              {isImage && previewUrl ? (
+                <div className="mb-4 w-full space-y-2">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="mx-auto max-h-48 max-w-full rounded-md object-contain"
+                  />
+                  <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                    <ImageIcon className="h-4 w-4" />
+                    <span>Vista previa de imagen</span>
+                  </div>
+                </div>
+              ) : (
+                <Upload className="mb-2 h-6 w-6 text-muted-foreground" />
+              )}
               {isDragActive ? (
                 <p>Suelta el archivo aquí...</p>
               ) : (
@@ -75,17 +119,27 @@ export function UploadFileModal({ onUpload }: UploadFileModalProps) {
                 </p>
               )}
               {selectedFile && (
-                <div className="mt-3 flex items-center justify-between gap-2 rounded bg-background px-3 py-1 text-xs">
-                  <span className="truncate">{selectedFile.name}</span>
+                <div className="mt-3 flex w-full items-center justify-between gap-2 rounded bg-background px-3 py-2 text-xs">
+                  <div className="flex-1 truncate">
+                    <p className="font-medium">{selectedFile.name}</p>
+                    <p className="text-muted-foreground">
+                      {(selectedFile.size / 1024).toFixed(1)} KB
+                      {isImage && ' · Imagen'}
+                    </p>
+                  </div>
                   <button
                     type="button"
                     className="text-muted-foreground hover:text-foreground"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedFile(null);
+                      if (previewUrl) {
+                        URL.revokeObjectURL(previewUrl);
+                        setPreviewUrl(null);
+                      }
                     }}
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                   </button>
                 </div>
               )}
@@ -95,7 +149,7 @@ export function UploadFileModal({ onUpload }: UploadFileModalProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
               >
                 Cancelar
               </Button>

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { ClientType } from '@/types/client';
 import { cn } from '@/lib/cn';

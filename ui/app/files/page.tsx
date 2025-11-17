@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import { useFiles, useDeleteFile, useUploadFile } from '@/features/files';
 import { FilesList, UploadFileModal } from '@/features/files';
 import { useApiError } from '@/hooks/use-api';
 
 export default function FilesPage() {
-  const { data, isLoading, isError, error } = useFiles();
+  const { data, isLoading, isError, error, refetch } = useFiles();
   const deleteFileMutation = useDeleteFile();
   const uploadFileMutation = useUploadFile();
   const { handleError } = useApiError();
@@ -16,6 +18,8 @@ export default function FilesPage() {
     setLocalError(null);
     try {
       await deleteFileMutation.mutateAsync({ id });
+      // Forzar refetch para asegurar que la lista se actualice
+      await refetch();
     } catch (err) {
       setLocalError(handleError(err));
     }
@@ -28,6 +32,8 @@ export default function FilesPage() {
         file: file.blob,
         filename: file.filename,
       });
+      // Forzar refetch para asegurar que la lista se actualice después de subir
+      await refetch();
     } catch (err) {
       setLocalError(handleError(err));
     }
@@ -35,7 +41,7 @@ export default function FilesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 pl-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Archivos</h1>
           <p className="text-sm text-muted-foreground">
@@ -46,15 +52,19 @@ export default function FilesPage() {
       </div>
 
       {(isError || localError) && (
-        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {localError || handleError(error)}
+        <div className="pl-4">
+          <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {localError || handleError(error)}
+          </div>
         </div>
       )}
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Cargando archivos...</p>
+        <p className="text-sm text-muted-foreground pl-4">Cargando archivos...</p>
       ) : (
-        <FilesList files={files} onDelete={handleDelete} />
+        <div className="pl-4">
+          <FilesList files={files} onDelete={handleDelete} />
+        </div>
       )}
     </div>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { ClientsTable } from '@/features/clients/components/clients-table';
 import { CreateClientModal } from '@/features/clients/components/create-client-modal';
@@ -33,7 +35,7 @@ export default function ClientsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pl-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Clientes</h1>
           <p className="text-muted-foreground">
@@ -44,17 +46,19 @@ export default function ClientsPage() {
       </div>
 
       {isLoading || !data ? (
-        <p className="text-sm text-muted-foreground">Cargando clientes...</p>
+        <p className="text-sm text-muted-foreground pl-4">Cargando clientes...</p>
       ) : (
-        <ClientsTable
-          data={data.items}
-          page={data.page}
-          pageSize={data.pageSize}
-          total={data.total}
-          onPageChange={setPage}
-          onUpdateClient={handleUpdate}
-          onDeleteClient={handleDelete}
-        />
+        <div className="pl-4">
+          <ClientsTable
+            data={data.items}
+            page={data.page}
+            pageSize={data.pageSize}
+            total={data.total}
+            onPageChange={setPage}
+            onUpdateClient={handleUpdate}
+            onDeleteClient={handleDelete}
+          />
+        </div>
       )}
     </div>
   );

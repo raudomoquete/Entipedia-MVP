@@ -46,10 +46,10 @@ export function ProjectForm({
       className="space-y-4"
     >
       <div className="space-y-1">
-        <label className="text-sm font-medium">Nombre</label>
+        <label className="text-sm font-medium text-foreground">Nombre</label>
         <input
           type="text"
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-primary/60"
           {...register('name')}
         />
         {errors.name && (
@@ -58,10 +58,10 @@ export function ProjectForm({
       </div>
 
       <div className="space-y-1">
-        <label className="text-sm font-medium">Descripción</label>
+        <label className="text-sm font-medium text-foreground">Descripción</label>
         <textarea
           rows={3}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-primary/60 resize-none"
           {...register('description')}
         />
         {errors.description && (
@@ -73,9 +73,9 @@ export function ProjectForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label className="text-sm font-medium">Estado</label>
+          <label className="text-sm font-medium text-foreground">Estado</label>
           <select
-            className="w-full rounded-md border px-3 py-2 text-sm"
+            className="w-full rounded-md border border-input bg-muted/30 px-3 py-2 text-sm text-foreground transition-all duration-200 focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-primary/60 hover:bg-muted/50 cursor-pointer"
             {...register('status')}
           >
             <option value="PENDING">Pendiente</option>
@@ -87,9 +87,9 @@ export function ProjectForm({
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-medium">Prioridad</label>
+          <label className="text-sm font-medium text-foreground">Prioridad</label>
           <select
-            className="w-full rounded-md border px-3 py-2 text-sm"
+            className="w-full rounded-md border border-input bg-muted/30 px-3 py-2 text-sm text-foreground transition-all duration-200 focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-primary/60 hover:bg-muted/50 cursor-pointer"
             {...register('priority')}
           >
             <option value="LOW">Baja</option>
