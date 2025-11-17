@@ -21,27 +21,37 @@ Este monorepo contiene:
 
 ### Backend (`backend/.env`)
 
-Parte de `backend/.env.example` y crea un fichero `.env` en la carpeta `backend`:
+Copia `backend/.env.example` y crea un fichero `.env` en la carpeta `backend` con valores para tu entorno local:
 
 ```env
 PORT=3000
 
+# Configuración de PostgreSQL (ajusta según tu instalación local)
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=entipedia
-DB_USER=entipedia_user
-DB_PASSWORD=entipedia_password
+DB_USER=tu_usuario_postgres
+DB_PASSWORD=tu_contraseña_postgres
+
+# Alternativa: Usar DATABASE_URL (formato: postgresql://user:password@host:port/database)
+# DATABASE_URL=postgresql://user:password@localhost:5432/entipedia
 
 # CORS: debe apuntar al puerto donde corre el frontend
 CORS_ORIGIN=http://localhost:3001
 
+# URL base de la API (para generar URLs absolutas de archivos)
+API_BASE_URL=http://localhost:3000
+
 # Rate limiting y logging
-RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 LOG_LEVEL=info
+
+# Entorno
+NODE_ENV=development
 ```
 
-Ajusta los valores de conexión a PostgreSQL según tu entorno.
+**Valores de ejemplo para desarrollo local**: Los valores por defecto (`entipedia`, `entipedia_user`, etc.) son solo para referencia local. En producción, usa credenciales seguras y únicas.
 
 ### Frontend (`ui`)
 
@@ -151,7 +161,45 @@ npm run test:e2e:ui
 
 ---
 
-## Resumen rápido de uso
+## Despliegue en Vercel
+
+### Backend
+
+1. **Variables de entorno en Vercel**: Configura las siguientes variables en el dashboard de Vercel (Settings → Environment Variables):
+
+   ```
+   PORT=3000
+   DB_HOST=tu_host_postgres (ej: db.xxxxx.supabase.co)
+   DB_PORT=5432
+   DB_NAME=tu_nombre_db
+   DB_USER=tu_usuario_db
+   DB_PASSWORD=tu_contraseña_segura | NO compartir en público
+   CORS_ORIGIN=https://tu-app-frontend.vercel.app
+   API_BASE_URL=https://tu-app-backend.vercel.app
+   NODE_ENV=production
+   LOG_LEVEL=info
+   RATE_LIMIT_WINDOW_MS=900000
+   RATE_LIMIT_MAX_REQUESTS=100
+   ```
+
+   > **Tip**: Si usas un servicio como Supabase, Neon, o Vercel Postgres, obtendrás estas credenciales desde el dashboard de tu proveedor.
+
+2. **Base de datos**: Asegúrate de tener una base de datos PostgreSQL accesible desde internet (Supabase, Neon, Railway, Vercel Postgres, etc.).
+
+3. **Migraciones**: Ejecuta las migraciones después del primer despliegue:
+   ```bash
+   # Opción 1: Ejecutar manualmente conectándote a la DB de producción
+   npm run db:migrate  # (ajusta las credenciales en .env primero)
+   
+   # Opción 2: Usar un script de build en Vercel que ejecute migraciones
+   # (revisa vercel.json o package.json scripts)
+   ```
+
+
+
+---
+
+## Resumen rápido de uso (Local)
 
 1. Configura `backend/.env` a partir de `.env.example`.
 2. Instala dependencias en `backend/` y `ui/`.
