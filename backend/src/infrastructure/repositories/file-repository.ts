@@ -72,7 +72,7 @@ export class FileRepository
           filePath: file.path,
           mimeType: file.mimeType,
           size: file.sizeInBytes,
-          createdAt: file.uploadedAt,
+          // createdAt se omite para que PostgreSQL use el default (now())
         })
         .returning();
 

@@ -122,7 +122,7 @@ export class ClientRepository
             client.lifetimeValue !== undefined
               ? client.lifetimeValue.getAmount().toString()
               : null,
-          createdAt: client.createdAt,
+          // createdAt se omite para que PostgreSQL use el default (now())
         })
         .returning();
 

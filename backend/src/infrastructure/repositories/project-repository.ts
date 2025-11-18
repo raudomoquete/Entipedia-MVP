@@ -66,7 +66,7 @@ export class ProjectRepository
           description: project.description,
           status: project.status,
           priority: project.priority,
-          createdAt: project.createdAt,
+          // createdAt se omite para que PostgreSQL use el default (now())
         })
         .returning();
 
