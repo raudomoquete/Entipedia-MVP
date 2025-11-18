@@ -89,7 +89,7 @@ export function ClientsTable({
                 <td className="px-3 py-2 align-top text-right">
                   <Button
                     variant="outline"
-                    size="xs"
+                    size="sm"
                     onClick={() => onDeleteClient(client.id)}
                   >
                     Eliminar
