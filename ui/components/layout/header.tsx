@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { APP_CONFIG, ROUTES } from '@/lib/constants';
+import { ROUTES } from '@/lib/constants';
 import { Logo } from '@/components/ui/logo';
 
 export function Header() {
